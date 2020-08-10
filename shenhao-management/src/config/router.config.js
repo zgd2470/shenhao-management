@@ -12,8 +12,36 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/index',
     children: [
+      {
+        path: '/index',
+        name: 'index',
+        meta: { title: '首页', keepAlive: true, permission: ['form'] },
+        component: () => import('@/views/index/index')
+      },
+      // knowledgeCenter
+      {
+        path: '/knowledgeCenter',
+        redirect: '/knowledgeCenter/videoList',
+        component: RouteView,
+        meta: { title: '知识中心', icon: 'table', permission: ['form'] },
+        children: [
+          {
+            path: '/knowledgeCenter/videoList',
+            name: 'videoList',
+            component: () => import('@/views/knowledgeCenter/videoList'),
+            meta: { title: '视频列表', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/knowledgeCenter/videoDetail',
+            name: 'videoDetail',
+            component: () => import('@/views/knowledgeCenter/videoDetail'),
+            hidden: true,
+            meta: { title: '视频配置详情', permission: ['form'] }
+          }
+        ]
+      },
       // forms
       {
         path: '/form',
@@ -43,6 +71,7 @@ export const asyncRouterMap = [
             name: 'TableListWrapper',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/list/TableList'),
+
             meta: { title: '查询表格', keepAlive: true, permission: ['table'] }
           }
         ]
