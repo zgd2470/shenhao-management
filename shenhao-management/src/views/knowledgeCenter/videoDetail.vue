@@ -1,7 +1,7 @@
 <template>
   <!-- hidden PageHeaderWrapper title demo -->
   <page-header-wrapper :title="false">
-    <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
+    <a-card :body-style="{padding: '24px 32px'}" :bordered="false" class="card-body">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item
           label="视频标题"
@@ -10,10 +10,10 @@
         >
           <a-input
             v-decorator="[
-              'titile',
+              'title',
               {rules: [{ required: true, message: '请输入视频标题' }]}
             ]"
-            name="titile"
+            name="title"
             placeholder="请输入视频标题"
           />
         </a-form-item>
@@ -55,8 +55,8 @@
           <a-radio-group
             v-decorator="['isRecommended' ,{rules: [{ required: true, message: '请选择是否推荐' }]}]"
           >
-            <a-radio :value="true">是</a-radio>
-            <a-radio :value="false">否</a-radio>
+            <a-radio :value="1">是</a-radio>
+            <a-radio :value="0">否</a-radio>
           </a-radio-group>
         </a-form-item>
 
@@ -88,6 +88,7 @@
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
           :required="true"
         >
+          <video-body v-if="videoUrl" :videoUrl="videoUrl" :key="videoUrl"></video-body>
           <a-upload
             name="avatar"
             list-type="picture-card"
@@ -97,15 +98,14 @@
             accept=".MP4"
             @change="handleChangeVideo"
           >
-            <video v-if="videoUrl" :src="videoUrl" alt="avatar" style="width:150px;height:150px" />
-            <div v-else>
+            <div>
               <a-icon :type="loadingVideo ? 'loading' : 'plus'" />
-              <div class="ant-upload-text">上传视频</div>
+              <div class="ant-upload-text">{{videoUrl? '重新上传':"上传视频"}}</div>
             </div>
           </a-upload>
         </a-form-item>
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary" style="width:180px">提交</a-button>
+          <a-button htmlType="submit" type="primary" style="width:180px" :loading="bntLoading">提交</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -114,19 +114,45 @@
 
 <script>
 import { url } from '../../utils/config'
+import videoBody from '../../components/videoBody/videoBody'
+import { setVideoDetail, getVideoDetail } from '../../api/shenhaoApi'
 export default {
   name: 'VideoDetail',
+  components: {
+    videoBody,
+  },
   data() {
     return {
       form: this.$form.createForm(this),
       imageUrl: '',
-      imagePmCode: '',
+      imgPmCode: '',
       upUrl: `/api/file`,
       loading: false,
       loadingVideo: false,
+      bntLoading: false,
       videoUrl: '',
       videoPmCode: '',
     }
+  },
+  created() {
+    const { pmCode } = this.$route.query
+    // 如果有值说明是编辑
+    if (!pmCode) {
+      return
+    }
+    getVideoDetail({ pmCode }).then((res) => {
+      if (!res.success) {
+        this.$message.error(res.message)
+        return
+      }
+      const { data = {} } = res
+      this.form.setFieldsValue({ ...data, isRecommended: Number(data.isRecommended) })
+      this.imageUrl = `/api/file/${data.imgPmCode}`
+      this.imgPmCode = data.imgPmCode
+      this.videoUrl = `/api/file/${data.videoPmCode}`
+      this.videoPmCode = data.videoPmCode
+      this.pmCode = data.pmCode
+    })
   },
   methods: {
     // handler
@@ -134,7 +160,31 @@ export default {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
+          if (!this.imgPmCode) {
+            this.$message.error('请上传图片')
+            return
+          }
+          if (!this.videoPmCode) {
+            this.$message.error('请上传视频')
+            return
+          }
+
+          this.bntLoading = true
+          setVideoDetail({
+            ...values,
+            pmCode: this.pmCode,
+            imgPmCode: this.imgPmCode,
+            videoPmCode: this.videoPmCode,
+          }).then((res) => {
+            const { message, success } = res
+            this.bntLoading = false
+            if (!success) {
+              this.$message.error(message)
+              return
+            }
+            this.$message.success(message)
+            this.$router.push('/knowledgeCenter/videoList')
+          })
         }
       })
     },
@@ -158,11 +208,12 @@ export default {
       if (info.file.status === 'done') {
         this.loading = false
         const { response = {} } = info.file
-        console.log(response.data)
-        this.imagePmCode = response.data
-        this.imageUrl = '/api/file/' + this.imagePmCode
+        this.imgPmCode = response.data
+        this.imageUrl = '/api/file/' + this.imgPmCode
       }
     },
   },
 }
 </script>
+<style scoped>
+</style>
