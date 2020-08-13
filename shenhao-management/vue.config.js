@@ -5,6 +5,9 @@ const GitRevision = new GitRevisionPlugin()
 const buildDate = JSON.stringify(new Date().toLocaleString())
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
 
+// const url = 'http://47.101.216.127:8080'
+const url = 'http://127.0.0.1:8080'
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -104,10 +107,17 @@ const vueConfig = {
     port: 8000,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        target: url,
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
+        }
+      },
+      '/video': {
+        target: url,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/video': ''
         }
       }
     }

@@ -105,7 +105,8 @@
           </a-upload>
         </a-form-item>
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary" style="width:180px" :loading="bntLoading">提交</a-button>
+          <a-button htmlType="submit" type="primary" style="width:150px" :loading="bntLoading">提交</a-button>
+          <a-button style="margin-left:80px;width:150px" @click="$router.back()">返回</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -115,7 +116,7 @@
 <script>
 import { url } from '../../utils/config'
 import videoBody from '../../components/videoBody/videoBody'
-import { setVideoDetail, getVideoDetail } from '../../api/shenhaoApi'
+import { setVideoDetail, getVideoDetail, getVideoPath } from '../../api/shenhaoApi'
 export default {
   name: 'VideoDetail',
   components: {
@@ -149,7 +150,7 @@ export default {
       this.form.setFieldsValue({ ...data, isRecommended: Number(data.isRecommended) })
       this.imageUrl = `/api/file/${data.imgPmCode}`
       this.imgPmCode = data.imgPmCode
-      this.videoUrl = `/api/file/${data.videoPmCode}`
+      this.videoUrl = data.videoPath
       this.videoPmCode = data.videoPmCode
       this.pmCode = data.pmCode
     })
@@ -175,6 +176,7 @@ export default {
             pmCode: this.pmCode,
             imgPmCode: this.imgPmCode,
             videoPmCode: this.videoPmCode,
+            videoPath: this.videoUrl,
           }).then((res) => {
             const { message, success } = res
             this.bntLoading = false
@@ -197,7 +199,12 @@ export default {
         const { response = {} } = info.file
         this.loadingVideo = false
         this.videoPmCode = response.data
-        this.videoUrl = '/api/file/' + this.videoPmCode
+        getVideoPath({ pmCode: this.videoPmCode }).then((res) => {
+          if (!res.success) {
+            return
+          }
+          this.videoUrl = res.data
+        })
       }
     },
     handleChange(info) {

@@ -32,6 +32,9 @@
       </div>
       <div>
         <a-table :columns="columns" :data-source="videoList" :scroll="{x:1000}">
+          <span slot="index" slot-scope="text,record,index">
+            <div>{{index+1}}</div>
+          </span>
           <span slot="imgPmCode" slot-scope="text">
             <img :src="text" alt class="img" @click="changeImgUrl(text)" />
           </span>
@@ -39,7 +42,7 @@
             <div>{{text}}</div>
           </span>
           <span slot="operation" slot-scope="text,record">
-            <a @click="changeVideoUrl(`/api/file/${record.videoPmCode}`)">查看视频</a>
+            <a @click="changeVideoUrl(`${record.videoPath}`)">查看视频</a>
             <a-divider type="vertical" />
             <a @click="goVideoDetail(record.pmCode)">编辑</a>
             <a-divider type="vertical" />
@@ -92,15 +95,24 @@ export default {
       videoUrl: '',
       columns: [
         {
+          title: '序号',
+          dataIndex: 'index',
+          key: 'index',
+          scopedSlots: { customRender: 'index' },
+          width: '60px',
+        },
+        {
           title: '标题',
           dataIndex: 'title',
           key: 'title',
+          width: '150px',
         },
         {
           title: '封面',
           dataIndex: 'imgPmCode',
           key: 'imgPmCode',
           scopedSlots: { customRender: 'imgPmCode' },
+          width: '120px',
         },
         {
           title: '是否推荐',
@@ -203,8 +215,8 @@ export default {
   margin-bottom: 20px;
 }
 .img {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
 }
 .body {

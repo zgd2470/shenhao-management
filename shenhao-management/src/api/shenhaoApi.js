@@ -4,7 +4,8 @@ const shenhaoApi = {
   setVideoDetail: '/setVideoDetail',
   getVideoList: '/getVideoList',
   getVideoDetail: '/getVideoDetail',
-  deleteVideo: '/deleteVideo'
+  deleteVideo: '/deleteVideo',
+  getVideoPath: '/getVideoPath'
 }
 
 export function setVideoDetail(parameter) {
@@ -26,6 +27,14 @@ export function getVideoList(parameter) {
 export function getVideoDetail(parameter) {
   return request({
     url: shenhaoApi.getVideoDetail,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getVideoPath(parameter) {
+  return request({
+    url: shenhaoApi.getVideoPath,
     method: 'get',
     params: parameter
   })
