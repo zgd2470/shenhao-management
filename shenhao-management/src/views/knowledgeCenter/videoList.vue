@@ -4,21 +4,21 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="课程名称">
-                <a-input v-decorator="['title']" placeholder />
+                <a-input v-decorator="['title']" placeholder :allowClear="true" />
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="是否推荐">
-                <a-select placeholder="请选择" v-decorator="['isRecommended']">
+                <a-select placeholder="请选择" v-decorator="['isRecommended']" :allowClear="true">
                   <a-select-option value="1">是</a-select-option>
                   <a-select-option value="0">否</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24"></a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24"></a-col>
+            <a-col :md="8" :sm="24">
               <span class="bntBody">
                 <a-button type="primary" @click="handleGetVideoList">查询</a-button>
                 <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -31,7 +31,7 @@
         <a-button type="primary" @click="newVideoDetail">新建知识视频</a-button>
       </div>
       <div>
-        <a-table :columns="columns" :data-source="videoList" :scroll="{x:1000}">
+        <z-table :columns="columns" :data-source="videoList" :scroll="{x:1000}" :loading="loading">
           <span slot="index" slot-scope="text,record,index">
             <div>{{index+1}}</div>
           </span>
@@ -58,7 +58,7 @@
               <a>删除</a>
             </a-popconfirm>
           </span>
-        </a-table>
+        </z-table>
       </div>
       <max-img :changeImgUrl="changeImgUrl" :imgUrl="imgUrl"></max-img>
       <a-modal
@@ -80,12 +80,14 @@ import { getVideoList, deleteVideo } from '../../api/shenhaoApi'
 import { isRecommendedEnum } from '../../utils/enum'
 import maxImg from '../../components/maxImg/maxImg'
 import videoBody from '../../components/videoBody/videoBody'
+import ZTable from '../../components/ZTable/ZTable.js'
 
 export default {
   name: 'VideoList',
   components: {
     maxImg,
     videoBody,
+    ZTable,
   },
   data() {
     return {
@@ -93,6 +95,7 @@ export default {
       videoList: [],
       imgUrl: '',
       videoUrl: '',
+      loading: false,
       columns: [
         {
           title: '序号',
@@ -125,7 +128,7 @@ export default {
           title: '人数',
           dataIndex: 'number',
           key: 'number',
-          width: '80px',
+          width: '100px',
         },
         {
           title: '视频简介',
@@ -188,7 +191,9 @@ export default {
       // 数量不多，先写死数量
       const formValue = this.form.getFieldsValue()
       const { title = '', isRecommended = '' } = formValue
+      this.loading = true
       getVideoList({ title, isRecommended, curren, pageSize }).then((res) => {
+        this.loading = false
         if (res.success) {
           const { data } = res
           // 数据转化
@@ -221,6 +226,6 @@ export default {
 }
 .body {
   margin: 20px;
-  padding-top: 50px;
+  padding: 50px 0px;
 }
 </style>

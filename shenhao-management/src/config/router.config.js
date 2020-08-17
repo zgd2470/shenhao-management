@@ -39,6 +39,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/knowledgeCenter/videoDetail'),
             hidden: true,
             meta: { title: '视频配置详情', permission: ['form'] }
+          },
+          {
+            path: '/knowledgeCenter/commentsList',
+            name: 'commentsList',
+            component: () => import('@/views/knowledgeCenter/commentsList'),
+            meta: { title: '评论列表', keepAlive: true, permission: ['form'] }
           }
         ]
       },

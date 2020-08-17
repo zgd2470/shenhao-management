@@ -5,7 +5,25 @@ const shenhaoApi = {
   getVideoList: '/getVideoList',
   getVideoDetail: '/getVideoDetail',
   deleteVideo: '/deleteVideo',
-  getVideoPath: '/getVideoPath'
+  getVideoPath: '/getVideoPath',
+  getCommentsList: '/getCommentsList',
+  deleteComments: '/deleteComments'
+}
+
+export function deleteComments(parameter) {
+  return request({
+    url: shenhaoApi.deleteComments,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getCommentsList(parameter) {
+  return request({
+    url: shenhaoApi.getCommentsList,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function setVideoDetail(parameter) {
