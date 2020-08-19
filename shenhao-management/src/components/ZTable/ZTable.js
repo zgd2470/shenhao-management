@@ -11,7 +11,7 @@ export default {
     let props = {}
     let top = 0
     let headerHeight = 0
-    let page = 70
+    let page = 65
     Object.keys(T.props).forEach(info => {
       if (this[info]) {
         props[info] = this[info]

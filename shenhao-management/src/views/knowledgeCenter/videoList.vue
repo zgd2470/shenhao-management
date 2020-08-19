@@ -31,34 +31,7 @@
         <a-button type="primary" @click="newVideoDetail">新建知识视频</a-button>
       </div>
       <div>
-        <z-table :columns="columns" :data-source="videoList" :scroll="{x:1000}" :loading="loading">
-          <span slot="index" slot-scope="text,record,index">
-            <div>{{index+1}}</div>
-          </span>
-          <span slot="imgPmCode" slot-scope="text">
-            <img :src="text" alt class="img" @click="changeImgUrl(text)" />
-          </span>
-          <span slot="isRecommended" slot-scope="text">
-            <div>{{text}}</div>
-          </span>
-          <span slot="operation" slot-scope="text,record">
-            <a @click="changeVideoUrl(`${record.videoPath}`)">查看视频</a>
-            <a-divider type="vertical" />
-            <a @click="goVideoDetail(record.pmCode)">编辑</a>
-            <a-divider type="vertical" />
-            <a-popconfirm
-              placement="top"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="deleteVideo(record.pmCode)"
-            >
-              <template slot="title">
-                <p>确定删除该视频吗？</p>
-              </template>
-              <a>删除</a>
-            </a-popconfirm>
-          </span>
-        </z-table>
+        <z-table :columns="columns" :data-source="videoList" :scroll="{x:1000}" :loading="loading"></z-table>
       </div>
       <max-img :changeImgUrl="changeImgUrl" :imgUrl="imgUrl"></max-img>
       <a-modal
@@ -101,8 +74,10 @@ export default {
           title: '序号',
           dataIndex: 'index',
           key: 'index',
-          scopedSlots: { customRender: 'index' },
           width: '60px',
+          customRender: (text, record, index) => {
+            return <div>{index + 1}</div>
+          },
         },
         {
           title: '标题',
@@ -114,15 +89,19 @@ export default {
           title: '封面',
           dataIndex: 'imgPmCode',
           key: 'imgPmCode',
-          scopedSlots: { customRender: 'imgPmCode' },
           width: '120px',
+          customRender: (text) => {
+            return <img src={text} alt class="img" onClick={this.changeImgUrl.bind(this, text)} />
+          },
         },
         {
           title: '是否推荐',
           dataIndex: 'isRecommended',
           key: 'isRecommended',
           width: '120px',
-          scopedSlots: { customRender: 'isRecommended' },
+          customRender: (text) => {
+            return <div>{text}</div>
+          },
         },
         {
           title: '人数',
@@ -139,8 +118,28 @@ export default {
         {
           title: '操作',
           key: 'operation',
-          scopedSlots: { customRender: 'operation' },
           width: '200px',
+          customRender: (_, record) => {
+            return (
+              <div>
+                <a onClick={this.changeVideoUrl.bind(this, `${record.videoPath}`)}>查看视频</a>
+                <a-divider type="vertical" />
+                <a onClick={this.goVideoDetail.bind(this, record.pmCode)}>编辑</a>
+                <a-divider type="vertical" />
+                <a-popconfirm
+                  placement="top"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  onConfirm={this.deleteVideo.bind(this, record.pmCode)}
+                >
+                  <template slot="title">
+                    <p>确定删除该视频吗？</p>
+                  </template>
+                  <a>删除</a>
+                </a-popconfirm>
+              </div>
+            )
+          },
         },
       ],
     }
@@ -150,6 +149,7 @@ export default {
   },
   methods: {
     changeImgUrl(value) {
+      console.log(value)
       this.imgUrl = value
     },
 

@@ -3,4 +3,10 @@ const isRecommendedEnum = {
   '0': '否'
 }
 
-export { isRecommendedEnum }
+const problemType = {
+  '1': '操作类',
+  '2': '技术类',
+  '3': '商务类'
+}
+
+export { isRecommendedEnum, problemType }

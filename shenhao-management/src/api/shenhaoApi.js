@@ -7,7 +7,61 @@ const shenhaoApi = {
   deleteVideo: '/deleteVideo',
   getVideoPath: '/getVideoPath',
   getCommentsList: '/getCommentsList',
-  deleteComments: '/deleteComments'
+  deleteComments: '/deleteComments',
+  submitProblem: '/submitProblem',
+  getProblemList: '/getProblemList',
+  deleteProblem: '/deleteProblem',
+  getDevelopmentYear: '/getDevelopmentYear',
+  setDevelopmentYear: '/setDevelopmentYear',
+  getDevelopmentEvent: './getDevelopmentEvent'
+}
+
+export function getDevelopmentEvent(parameter) {
+  return request({
+    url: shenhaoApi.getDevelopmentEvent,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getDevelopmentYear(parameter) {
+  return request({
+    url: shenhaoApi.getDevelopmentYear,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function setDevelopmentYear(parameter) {
+  return request({
+    url: shenhaoApi.setDevelopmentYear,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function deleteProblem(parameter) {
+  return request({
+    url: shenhaoApi.deleteProblem,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getProblemList(parameter) {
+  return request({
+    url: shenhaoApi.getProblemList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function submitProblem(parameter) {
+  return request({
+    url: shenhaoApi.submitProblem,
+    method: 'post',
+    data: parameter
+  })
 }
 
 export function deleteComments(parameter) {
