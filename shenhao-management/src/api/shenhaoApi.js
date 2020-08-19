@@ -13,7 +13,25 @@ const shenhaoApi = {
   deleteProblem: '/deleteProblem',
   getDevelopmentYear: '/getDevelopmentYear',
   setDevelopmentYear: '/setDevelopmentYear',
-  getDevelopmentEvent: './getDevelopmentEvent'
+  getDevelopmentEvent: '/getDevelopmentEvent',
+  deleteDevelopmentYear: '/deleteDevelopmentYear',
+  setDevelopmentEvent: '/setDevelopmentEvent'
+}
+
+export function deleteDevelopmentYear(parameter) {
+  return request({
+    url: shenhaoApi.deleteDevelopmentYear,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function setDevelopmentEvent(parameter) {
+  return request({
+    url: shenhaoApi.setDevelopmentEvent,
+    method: 'post',
+    data: parameter
+  })
 }
 
 export function getDevelopmentEvent(parameter) {
