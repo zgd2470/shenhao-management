@@ -5,17 +5,18 @@
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="视频标题">
-                <a-select placeholder="请选择" v-decorator="['videoPmCode']" :allowClear="true">
-                  <a-select-option
-                    v-for="item in videoList"
-                    :key="item.pmCode"
-                    :value="item.pmCode"
-                  >{{item.title}}</a-select-option>
+              <a-form-item label="手机号">
+                <a-input v-decorator="['phone']" placeholder :allowClear="true" />
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="是否处理">
+                <a-select placeholder="请选择" v-decorator="['isDeal']" :allowClear="true">
+                  <a-select-option :value="0">未处理</a-select-option>
+                  <a-select-option :value="1">已处理</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24"></a-col>
             <a-col :md="8" :sm="24">
               <span class="bntBody">
                 <a-button type="primary" @click="handleCommentsList(1,10)">查询</a-button>
@@ -29,7 +30,7 @@
         <z-table
           :columns="columns"
           :data-source="commentsList"
-          :scroll="{x:1000}"
+          :scroll="{x:1500}"
           :loading="loading"
           :pagination="pagination"
         ></z-table>
@@ -39,18 +40,18 @@
 </template>
 
 <script>
-import { getVideoList, deleteComments, getCommentsList } from '../../api/shenhaoApi'
+import { dealTrial, getTrialList } from '../../api/shenhaoApi'
+import moment from 'moment'
 import ZTable from '../../components/ZTable/ZTable.js'
 
 export default {
-  name: 'CommentsList',
+  name: 'Demonstrate',
   components: {
     ZTable,
   },
   data() {
     return {
       form: this.$form.createForm(this),
-      videoList: [],
       commentsList: [],
       pagination: {
         showQuickJumper: true,
@@ -77,60 +78,91 @@ export default {
           },
         },
         {
-          title: '视频标题',
-          dataIndex: 'title',
-          key: 'title',
-          width: '180px',
-        },
-        {
-          title: '昵称',
+          title: '姓名',
           dataIndex: 'name',
           key: 'name',
           width: '120px',
         },
         {
-          title: '评价分数',
-          dataIndex: 'score',
-          key: 'score',
+          title: '手机',
+          dataIndex: 'phone',
+          key: 'phone',
           width: '120px',
         },
         {
-          title: '评价内容',
-          dataIndex: 'content',
-          key: 'content',
-          width: '400px',
+          title: '职务',
+          dataIndex: 'position',
+          key: 'position',
+          width: '120px',
         },
         {
-          title: '评价时间',
+          title: '公司名称',
+          dataIndex: 'companyName',
+          key: 'companyName',
+          width: '180px',
+        },
+        {
+          title: '公司规模',
+          dataIndex: 'companySize',
+          key: 'companySize',
+          width: '180px',
+        },
+        {
+          title: '邮箱',
+          dataIndex: 'email',
+          key: 'email',
+          width: '180px',
+        },
+        {
+          title: '提交时间',
           dataIndex: 'createTime',
           key: 'createTime',
-          width: '200px',
+          width: '180px',
+          customRender: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
+        },
+        {
+          title: '状态',
+          dataIndex: 'isDeal',
+          key: 'isDeal',
+          width: '90px',
+          fixed: 'right',
+          customRender: (text) => {
+            if (text === '0') {
+              return <div style="color:red">未处理</div>
+            }
+            if (text === '1') {
+              return <div style="color:green">已处理</div>
+            }
+          },
         },
         {
           title: '操作',
           key: 'operation',
           width: '60px',
+          fixed: 'right',
           customRender: (text, record) => {
-            return (
-              <a-popconfirm
-                placement="top"
-                ok-text="确定"
-                cancel-text="取消"
-                onConfirm={this.handleDeleteComment.bind(this, record.pmCode)}
-              >
-                <template slot="title">
-                  <p>确定删除该评论吗？</p>
-                </template>
-                <a>删除</a>
-              </a-popconfirm>
-            )
+            if (record.isDeal === '0') {
+              return (
+                <a-popconfirm
+                  placement="top"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  onConfirm={this.handleDeal.bind(this, record.pmCode)}
+                >
+                  <template slot="title">
+                    <p>确定已处理吗？</p>
+                  </template>
+                  <a>处理</a>
+                </a-popconfirm>
+              )
+            }
+            return null
           },
         },
       ],
     }
   },
   created() {
-    this.handleGetVideoList()
     this.handleCommentsList()
   },
   methods: {
@@ -139,9 +171,8 @@ export default {
       this.handleCommentsList()
     },
 
-    // 删除
-    handleDeleteComment(pmCode) {
-      deleteComments({ pmCode }).then((res) => {
+    handleDeal(pmCode) {
+      dealTrial({ pmCode }).then((res) => {
         if (!res.success) {
           this.$message.error(res.message)
           return
@@ -154,7 +185,7 @@ export default {
     handleCommentsList(current = 1, pageSize = 10) {
       const formValue = this.form.getFieldsValue()
       this.loading = true
-      getCommentsList({ ...formValue, current, pageSize }).then((res) => {
+      getTrialList({ ...formValue, current, pageSize }).then((res) => {
         this.loading = false
         if (res.success) {
           const { data } = res
@@ -166,17 +197,6 @@ export default {
             current: current,
             pageSize: pageSize,
           }
-        }
-      })
-    },
-
-    handleGetVideoList(curren = 1, pageSize = 200) {
-      // 数量不多，先写死数量
-      getVideoList({ curren, pageSize }).then((res) => {
-        if (res.success) {
-          const { data } = res
-          // 数据转化
-          this.videoList = data.list
         }
       })
     },

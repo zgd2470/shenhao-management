@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="table-Body" style="margin-bottom:30px">
-          <h2>当期年份：{{year}}</h2>
+          <h2>已选年份：{{year}}</h2>
           <z-table
             :columns="columns"
             :data-source="eventList"

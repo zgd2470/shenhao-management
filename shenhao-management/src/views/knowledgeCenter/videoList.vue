@@ -119,6 +119,7 @@ export default {
           title: '操作',
           key: 'operation',
           width: '200px',
+          fixed: 'right',
           customRender: (_, record) => {
             return (
               <div>

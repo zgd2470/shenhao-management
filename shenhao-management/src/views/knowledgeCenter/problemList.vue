@@ -99,7 +99,8 @@ export default {
         {
           title: '操作',
           key: 'operation',
-          width: '100px',
+          width: '120px',
+          fixed: 'right',
           customRender: (text, record) => {
             return (
               <div class="opera">

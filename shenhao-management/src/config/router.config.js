@@ -25,7 +25,7 @@ export const asyncRouterMap = [
         path: '/knowledgeCenter',
         redirect: '/knowledgeCenter/videoList',
         component: RouteView,
-        meta: { title: '知识中心', icon: 'table', permission: ['form'] },
+        meta: { title: '知识中心管理', icon: 'table', permission: ['form'] },
         children: [
           {
             path: '/knowledgeCenter/videoList',
@@ -55,6 +55,32 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/formList',
+        redirect: '/formList/demonstrate',
+        component: RouteView,
+        meta: { title: '表单提交管理', icon: 'table', permission: ['form'] },
+        children: [
+          {
+            path: '/formList/demonstrate',
+            name: 'demonstrate',
+            component: () => import('@/views/formList/demonstrate'),
+            meta: { title: '预约演示列表', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/formList/partner',
+            name: 'partner',
+            component: () => import('@/views/formList/partner'),
+            meta: { title: '成为合作伙伴列表', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/formList/trial',
+            name: 'trial',
+            component: () => import('@/views/formList/trial'),
+            meta: { title: '试用申请列表', keepAlive: true, permission: ['form'] }
+          }
+        ]
+      },
+      {
         path: '/aboutShenHao',
         redirect: '/aboutShenHao/developmentCourse',
         component: RouteView,
@@ -67,41 +93,7 @@ export const asyncRouterMap = [
             meta: { title: '发展历程', keepAlive: true, permission: ['form'] }
           }
         ]
-      },
-      // forms
-      // {
-      //   path: '/form',
-      //   redirect: '/form/base-form',
-      //   component: RouteView,
-      //   meta: { title: '表单页', icon: 'form', permission: ['form'] },
-      //   children: [
-      //     {
-      //       path: '/form/base-form',
-      //       name: 'BaseForm',
-      //       component: () => import('@/views/form/basicForm'),
-      //       meta: { title: '基础表单', keepAlive: true, permission: ['form'] }
-      //     }
-      //   ]
-      // },
-
-      // list
-      // {
-      //   path: '/list',
-      //   name: 'list',
-      //   component: RouteView,
-      //   redirect: '/list/table-list',
-      //   meta: { title: '列表页', icon: 'table', permission: ['table'] },
-      //   children: [
-      //     {
-      //       path: '/list/table-list/:pageNo([1-9]\\d*)?',
-      //       name: 'TableListWrapper',
-      //       hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-      //       component: () => import('@/views/list/TableList'),
-
-      //       meta: { title: '查询表格', keepAlive: true, permission: ['table'] }
-      //     }
-      //   ]
-      // }
+      }
     ]
   },
   {

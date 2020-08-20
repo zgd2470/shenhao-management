@@ -15,7 +15,61 @@ const shenhaoApi = {
   setDevelopmentYear: '/setDevelopmentYear',
   getDevelopmentEvent: '/getDevelopmentEvent',
   deleteDevelopmentYear: '/deleteDevelopmentYear',
-  setDevelopmentEvent: '/setDevelopmentEvent'
+  setDevelopmentEvent: '/setDevelopmentEvent',
+  getDemonstrateList: '/getDemonstrateList',
+  dealDemonstrate: '/dealDemonstrate',
+  getPartnerList: '/getPartnerList',
+  dealPartner: '/dealPartner',
+  getTrialList: '/getTrialList',
+  dealTrial: '/dealTrial'
+}
+
+export function dealTrial(parameter) {
+  return request({
+    url: shenhaoApi.dealTrial,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getTrialList(parameter) {
+  return request({
+    url: shenhaoApi.getTrialList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getPartnerList(parameter) {
+  return request({
+    url: shenhaoApi.getPartnerList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function dealPartner(parameter) {
+  return request({
+    url: shenhaoApi.dealPartner,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function dealDemonstrate(parameter) {
+  return request({
+    url: shenhaoApi.dealDemonstrate,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getDemonstrateList(parameter) {
+  return request({
+    url: shenhaoApi.getDemonstrateList,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function deleteDevelopmentYear(parameter) {
