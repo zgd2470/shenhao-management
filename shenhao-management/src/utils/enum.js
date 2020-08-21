@@ -9,4 +9,19 @@ const problemType = {
   '3': '商务类'
 }
 
-export { isRecommendedEnum, problemType }
+const pageType = {
+  index: '首页',
+  s5: 's5',
+  s7: 's7',
+  wage: '工资宝',
+  accounting: '云会计',
+  save: '云进销存',
+  partner: '伙伴发展'
+}
+
+const stateEnum = {
+  '0': '禁用',
+  '1': '启用'
+}
+
+export { isRecommendedEnum, problemType, pageType, stateEnum }

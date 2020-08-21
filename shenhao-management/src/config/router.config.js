@@ -81,6 +81,19 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/banner/bannerList',
+        name: 'bannerList',
+        component: () => import('@/views/banner/bannerList'),
+        meta: { title: 'Banner管理', icon: 'table', permission: ['form'] }
+      },
+      {
+        path: '/banner/bannerDetail',
+        name: 'bannerDetail',
+        hidden: true,
+        component: () => import('@/views/banner/bannerDetail'),
+        meta: { title: 'Banner详情', icon: 'table', permission: ['form'] }
+      },
+      {
         path: '/aboutShenHao',
         redirect: '/aboutShenHao/developmentCourse',
         component: RouteView,
@@ -119,16 +132,16 @@ export const constantRouterMap = [
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       },
-      {
-        path: 'register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
-      },
-      {
-        path: 'register-result',
-        name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-      },
+      // {
+      //   path: 'register',
+      //   name: 'register',
+      //   component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
+      // },
+      // {
+      //   path: 'register-result',
+      //   name: 'registerResult',
+      //   component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+      // },
       {
         path: 'recover',
         name: 'recover',

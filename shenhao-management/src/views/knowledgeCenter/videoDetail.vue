@@ -1,6 +1,6 @@
 <template>
   <!-- hidden PageHeaderWrapper title demo -->
-  <page-header-wrapper :title="false">
+  <page-header-wrapper>
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false" class="card-body">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item

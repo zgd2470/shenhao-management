@@ -21,7 +21,34 @@ const shenhaoApi = {
   getPartnerList: '/getPartnerList',
   dealPartner: '/dealPartner',
   getTrialList: '/getTrialList',
-  dealTrial: '/dealTrial'
+  dealTrial: '/dealTrial',
+  getBannerList: '/getBannerList',
+  setBanner: '/setBanner',
+  getBannerDetail: '/getBannerDetail'
+}
+
+export function getBannerDetail(parameter) {
+  return request({
+    url: shenhaoApi.getBannerDetail,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function setBanner(parameter) {
+  return request({
+    url: shenhaoApi.setBanner,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function getBannerList(parameter) {
+  return request({
+    url: shenhaoApi.getBannerList,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function dealTrial(parameter) {
