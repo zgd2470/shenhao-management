@@ -71,15 +71,6 @@ export default {
       loading: false,
       columns: [
         {
-          title: '序号',
-          dataIndex: 'index',
-          key: 'index',
-          width: '60px',
-          customRender: (text, record, index) => {
-            return <div>{index + 1}</div>
-          },
-        },
-        {
           title: '标题',
           dataIndex: 'title',
           key: 'title',
@@ -104,6 +95,21 @@ export default {
           },
         },
         {
+          title: '是否猜你喜欢',
+          dataIndex: 'isGuessLike',
+          key: 'isGuessLike',
+          width: '120px',
+          customRender: (text) => {
+            return <div>{text}</div>
+          },
+        },
+        {
+          title: '排序',
+          dataIndex: 'sorting',
+          key: 'sorting',
+          width: '100px',
+        },
+        {
           title: '人数',
           dataIndex: 'number',
           key: 'number',
@@ -114,6 +120,21 @@ export default {
           dataIndex: 'introduction',
           key: 'introduction',
           width: '400px',
+        },
+        {
+          title: 'tags',
+          dataIndex: 'tags',
+          key: 'tags',
+          width: '200px',
+          customRender: (text) => {
+            return (
+              <div>
+                {text.map((info) => (
+                  <a-tag>{info}</a-tag>
+                ))}
+              </div>
+            )
+          },
         },
         {
           title: '操作',
@@ -188,8 +209,10 @@ export default {
       })
     },
 
-    handleGetVideoList(curren = 1, pageSize = 200) {
+    handleGetVideoList() {
       // 数量不多，先写死数量
+      const curren = 1,
+        pageSize = 200
       const formValue = this.form.getFieldsValue()
       const { title = '', isRecommended = '' } = formValue
       this.loading = true
@@ -202,6 +225,7 @@ export default {
             return {
               ...info,
               isRecommended: isRecommendedEnum[info.isRecommended],
+              isGuessLike: isRecommendedEnum[info.isGuessLike],
               imgPmCode: `/api/file/${info.imgPmCode}`,
             }
           })

@@ -61,6 +61,58 @@
         </a-form-item>
 
         <a-form-item
+          label="是否为猜你喜欢"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          :required="true"
+        >
+          <a-radio-group
+            v-decorator="['isGuessLike' ,{rules: [{ required: true, message: '请选择是否为猜你喜欢' }]}]"
+          >
+            <a-radio :value="1">是</a-radio>
+            <a-radio :value="0">否</a-radio>
+          </a-radio-group>
+        </a-form-item>
+
+        <a-form-item
+          label="排序"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          :required="true"
+        >
+          <a-input-number
+            v-decorator="['sorting' ,{rules: [{ required: true, message: '请输入序号' }]}]"
+          />
+        </a-form-item>
+
+        <a-form-item
+          label="tag"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          :required="true"
+        >
+          <a-tag
+            closable
+            v-for="(item,i) in tags"
+            :key="tags[i]"
+            @close="closeTags(tags[i])"
+          >{{tags[i]}}</a-tag>
+          <a-input
+            v-if="inputVisible"
+            type="text"
+            size="small"
+            :style="{ width: '78px' }"
+            :value="tabsvalue"
+            @change="handleInputChange"
+            @blur="handleInputConfirm"
+            @keyup.enter="handleInputConfirm"
+          />
+          <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="inputVisible=true">
+            <a-icon type="plus" />新增tag
+          </a-tag>
+        </a-form-item>
+
+        <a-form-item
           label="上传图片"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
@@ -126,11 +178,14 @@ export default {
     return {
       form: this.$form.createForm(this),
       imageUrl: '',
+      tags: [],
       imgPmCode: '',
       upUrl: `/api/file`,
       loading: false,
       loadingVideo: false,
       bntLoading: false,
+      inputVisible: false,
+      tabsValue: '',
       videoUrl: '',
       videoPmCode: '',
     }
@@ -147,15 +202,32 @@ export default {
         return
       }
       const { data = {} } = res
-      this.form.setFieldsValue({ ...data, isRecommended: Number(data.isRecommended) })
+      this.form.setFieldsValue({
+        ...data,
+        isRecommended: Number(data.isRecommended),
+        isGuessLike: Number(data.isGuessLike),
+      })
       this.imageUrl = `/api/file/${data.imgPmCode}`
       this.imgPmCode = data.imgPmCode
       this.videoUrl = data.videoPath
       this.videoPmCode = data.videoPmCode
       this.pmCode = data.pmCode
+      this.tags = data.tags || []
     })
   },
   methods: {
+    handleInputChange(e) {
+      this.tabsValue = e.target.value
+    },
+    handleInputConfirm() {
+      this.tags.push(this.tabsValue)
+
+      this.tabsValue = ''
+      this.inputVisible = false
+    },
+    closeTags(name) {
+      this.tags = this.tags.filter((info) => info !== name)
+    },
     // handler
     handleSubmit(e) {
       e.preventDefault()
@@ -171,12 +243,14 @@ export default {
           }
 
           this.bntLoading = true
+
           setVideoDetail({
             ...values,
             pmCode: this.pmCode,
             imgPmCode: this.imgPmCode,
             videoPmCode: this.videoPmCode,
             videoPath: this.videoUrl,
+            tags: this.tags,
           }).then((res) => {
             const { message, success } = res
             this.bntLoading = false
