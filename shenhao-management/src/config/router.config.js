@@ -58,7 +58,7 @@ export const asyncRouterMap = [
         path: '/formList',
         redirect: '/formList/demonstrate',
         component: RouteView,
-        meta: { title: '表单管理', icon: 'table', permission: ['form'] },
+        meta: { title: '表单管理', icon: 'form', permission: ['form'] },
         children: [
           {
             path: '/formList/demonstrate',
@@ -85,7 +85,7 @@ export const asyncRouterMap = [
         name: 'newsManagement',
         component: RouteView,
         redirect: '/newsManagement/newsList',
-        meta: { title: '新闻管理', icon: 'table', permission: ['news'] },
+        meta: { title: '新闻管理', icon: 'global', permission: ['news'] },
         children: [
           {
             path: '/newsManagement/newsList',
@@ -107,7 +107,7 @@ export const asyncRouterMap = [
         path: '/aboutShenHao',
         redirect: '/aboutShenHao/developmentCourse',
         component: RouteView,
-        meta: { title: '关于甚好', icon: 'table', permission: ['about'] },
+        meta: { title: '关于甚好', icon: 'appstore', permission: ['about'] },
         children: [
           {
             path: '/aboutShenHao/developmentCourse',
@@ -121,7 +121,7 @@ export const asyncRouterMap = [
         path: '/setting',
         redirect: '/setting/bannerList',
         component: RouteView,
-        meta: { title: '系统设置', icon: 'table', permission: ['setting'] },
+        meta: { title: '系统设置', icon: 'setting', permission: ['setting'] },
         children: [
           {
             path: '/setting/bannerList',
@@ -156,7 +156,7 @@ export const asyncRouterMap = [
         path: '/dataStatistical',
         name: 'dataStatistical',
         component: () => import('@/views/dataStatistical/pageStatistical'),
-        meta: { title: '访问统计', icon: 'table', permission: ['dataStatistical'] }
+        meta: { title: '访问统计', icon: 'area-chart', permission: ['dataStatistical'] }
       }
     ]
   },
