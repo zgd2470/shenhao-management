@@ -24,7 +24,9 @@ const shenhaoApi = {
   dealTrial: '/dealTrial',
   getBannerList: '/getBannerList',
   setBanner: '/setBanner',
-  getBannerDetail: '/getBannerDetail'
+  getBannerDetail: '/getBannerDetail',
+  getStatistical: '/getStatistical',
+  getNewsList: '/getNewsList'
 }
 
 export function getBannerDetail(parameter) {
@@ -97,6 +99,7 @@ export function getDemonstrateList(parameter) {
     method: 'get',
     params: parameter
   })
+
 }
 
 export function deleteDevelopmentYear(parameter) {
@@ -214,6 +217,24 @@ export function getVideoPath(parameter) {
 export function deleteVideo(parameter) {
   return request({
     url: shenhaoApi.deleteVideo,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//获取统计api
+export function getStatistical(parameter) {
+  return request({
+    url: shenhaoApi.getStatistical,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//获取新闻列表api
+export function getNewsList(parameter) {
+  return request({
+    url: shenhaoApi.getNewsList,
     method: 'get',
     params: parameter
   })
