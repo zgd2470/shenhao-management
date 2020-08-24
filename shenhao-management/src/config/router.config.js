@@ -81,6 +81,28 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/newsManagement',
+        name: 'newsManagement',
+        component: RouteView,
+        redirect: '/newsManagement/newsList',
+        meta: { title: '新闻管理', icon: 'table', permission: ['form'] },
+        children: [
+          {
+            path: '/newsManagement/newsList',
+            name: 'newsList',
+            component: () => import('@/views/newsManagement/newsList'),
+            meta: { title: '新闻列表', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/newsManagement/newsDetail',
+            name: 'newsDetail',
+            component: () => import('@/views/newsManagement/newsDetail'),
+            hidden: true,
+            meta: { title: '新闻详情', keepAlive: true, permission: ['form'] }
+          }
+        ]
+      },
+      {
         path: '/banner/bannerList',
         name: 'bannerList',
         component: () => import('@/views/banner/bannerList'),
@@ -92,6 +114,7 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('@/views/banner/bannerDetail'),
         meta: { title: 'Banner详情', icon: 'table', permission: ['form'] }
+
       },
       {
         path: '/aboutShenHao',
@@ -106,7 +129,48 @@ export const asyncRouterMap = [
             meta: { title: '发展历程', keepAlive: true, permission: ['form'] }
           }
         ]
-      }
+      },
+
+      {
+        path: '/dataStatistical',
+        name: 'dataStatistical',
+        component: () => import('@/views/dataStatistical/pageStatistical'),
+        meta: { title: '访问统计', icon: 'table', permission: ['form'] }
+      },
+      // forms
+      // {
+      //   path: '/form',
+      //   redirect: '/form/base-form',
+      //   component: RouteView,
+      //   meta: { title: '表单页', icon: 'form', permission: ['form'] },
+      //   children: [
+      //     {
+      //       path: '/form/base-form',
+      //       name: 'BaseForm',
+      //       component: () => import('@/views/form/basicForm'),
+      //       meta: { title: '基础表单', keepAlive: true, permission: ['form'] }
+      //     }
+      //   ]
+      // },
+
+      // list
+      // {
+      //   path: '/list',
+      //   name: 'list',
+      //   component: RouteView,
+      //   redirect: '/list/table-list',
+      //   meta: { title: '列表页', icon: 'table', permission: ['table'] },
+      //   children: [
+      //     {
+      //       path: '/list/table-list/:pageNo([1-9]\\d*)?',
+      //       name: 'TableListWrapper',
+      //       hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+      //       component: () => import('@/views/list/TableList'),
+
+      //       meta: { title: '查询表格', keepAlive: true, permission: ['table'] }
+      //     }
+      //   ]
+      // }
     ]
   },
   {
