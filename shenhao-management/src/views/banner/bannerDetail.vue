@@ -45,6 +45,7 @@
         >
           <a-input-number
             v-decorator="['sorting' ,{rules: [{ required: true, message: '请输入序号' }]}]"
+            :min="1"
           />
         </a-form-item>
 

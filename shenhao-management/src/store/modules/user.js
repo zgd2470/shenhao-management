@@ -1,6 +1,7 @@
 import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { resetRouter } from '../../router/index'
 import { welcome } from '@/utils/util'
 
 const user = {
@@ -103,18 +104,12 @@ const user = {
     // 登出
     Logout({ commit, state }) {
       return new Promise(resolve => {
-        logout(state.token)
-          .then(() => {
-            commit('SET_TOKEN', '')
-            commit('SET_ROLES', [])
-            storage.remove(ACCESS_TOKEN)
-            localStorage.removeItem('pmCode')
-            resolve()
-          })
-          .catch(() => {
-            resolve()
-          })
-          .finally(() => {})
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        storage.remove(ACCESS_TOKEN)
+        localStorage.removeItem('pmCode')
+        resetRouter()
+        resolve()
       })
     }
   }
