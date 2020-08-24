@@ -4,20 +4,20 @@
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false" class="card-body">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item
-          label="视频标题"
+          label="文章标题"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'title',
-              {rules: [{ required: true, message: '请输入视频标题' }]}
+              {rules: [{ required: true, message: '请输入文章标题' }]}
             ]"
             name="title"
-            placeholder="请输入视频标题"
+            placeholder="请输入文章标题"
           />
         </a-form-item>
-        <a-form-item
+        <!-- <a-form-item
           label="视频简介"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
@@ -30,19 +30,19 @@
               {rules: [{ required: true, message: '请输入视频简介' }]}
             ]"
           />
-        </a-form-item>
+        </a-form-item>-->
         <a-form-item
-          label="虚拟观看人数"
+          label="虚拟阅读人数"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input-number
             v-decorator="[
               'number',
-              {rules: [{ required: true, message: '请输入虚拟观看人数' }]}
+              {rules: [{ required: true, message: '请输入虚拟阅读人数' }]}
             ]"
             name="number"
-            placeholder="请输入虚拟观看人数"
+            placeholder="请输入虚拟阅读人数"
             style="width:180px"
           />
         </a-form-item>
@@ -82,7 +82,7 @@
             </div>
           </a-upload>
         </a-form-item>
-        <a-form-item
+        <!-- <a-form-item
           label="上传视频"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
@@ -103,7 +103,7 @@
               <div class="ant-upload-text">{{videoUrl? '重新上传':"上传视频"}}</div>
             </div>
           </a-upload>
-        </a-form-item>
+        </a-form-item>-->
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
           <a-button htmlType="submit" type="primary" style="width:150px" :loading="bntLoading">提交</a-button>
           <a-button style="margin-left:80px;width:150px" @click="$router.back()">返回</a-button>
