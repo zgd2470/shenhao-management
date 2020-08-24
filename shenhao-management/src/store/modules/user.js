@@ -10,7 +10,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    username: ''
   },
 
   mutations: {
@@ -29,6 +30,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_USERNAME: (state, username) => {
+      state.username = username
     }
   },
 
@@ -40,7 +44,7 @@ const user = {
           .then(response => {
             const result = response.result
 
-            storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
+            storage.set(ACCESS_TOKEN, result.token)
             commit('SET_TOKEN', result.token)
             resolve(response)
           })
@@ -73,13 +77,15 @@ const user = {
               })
               commit('SET_ROLES', result.role)
               commit('SET_INFO', result)
+              commit('SET_USERNAME', result.username)
             } else {
               reject(new Error('getInfo: roles must be a non-null array !'))
             }
 
-            commit('SET_NAME', { name: result.name, welcome: welcome() })
             commit('SET_AVATAR', result.avatar)
 
+            localStorage.setItem('lang', 'zh-CN')
+            localStorage.setItem('app_language', 'zh-CN')
             resolve(response)
           })
           .catch(error => {

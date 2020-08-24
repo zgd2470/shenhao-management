@@ -8,7 +8,7 @@
     width="900px"
   >
     <div class="body">
-      <img :src="imgUrl" alt class="maxImg" />
+      <img :src="imgUrl" alt class="popBannerImg" />
     </div>
   </a-modal>
 </template>
@@ -44,7 +44,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.maxImg {
+.popBannerImg {
   width: 900px;
   height: 450px;
   position: relative;

@@ -73,7 +73,7 @@ export default {
           key: 'imgPmCode',
           width: '200px',
           customRender: (text) => {
-            return <img src={text} alt class="img" onClick={this.changeImgUrl.bind(this, text)} />
+            return <img src={text} alt class="bannerImg" onClick={this.changeImgUrl.bind(this, text)} />
           },
         },
         {
@@ -236,7 +236,7 @@ export default {
 .newBnt {
   margin-bottom: 20px;
 }
-.img {
+.bannerImg {
   width: 180px;
   height: 80px;
   cursor: pointer;
