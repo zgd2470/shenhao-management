@@ -26,7 +26,25 @@ const shenhaoApi = {
   setBanner: '/setBanner',
   getBannerDetail: '/getBannerDetail',
   getStatistical: '/getStatistical',
-  getNewsList: '/getNewsList'
+  getNewsList: '/getNewsList',
+  getMenuArray: '/getMenuArray',
+  setUser: '/setUser'
+}
+
+export function setUser(parameter) {
+  return request({
+    url: shenhaoApi.setUser,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function getMenuArray(parameter) {
+  return request({
+    url: shenhaoApi.getMenuArray,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function getBannerDetail(parameter) {
@@ -99,7 +117,6 @@ export function getDemonstrateList(parameter) {
     method: 'get',
     params: parameter
   })
-
 }
 
 export function deleteDevelopmentYear(parameter) {

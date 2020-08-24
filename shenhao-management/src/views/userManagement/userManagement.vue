@@ -30,7 +30,7 @@
         </a-form>
       </div>
       <div class="newBnt">
-        <a-button type="primary" @click="newBannerDetail">新增Banner</a-button>
+        <a-button type="primary" @click="newUserDetail">新增用户</a-button>
       </div>
       <div>
         <z-table :columns="columns" :data-source="videoList" :scroll="{x:1000}" :loading="loading"></z-table>
@@ -178,11 +178,11 @@ export default {
       if (pmCode) {
         query = `?pmCode=${pmCode}`
       }
-      this.$router.push(`/setting/bannerDetail${query}`)
+      this.$router.push(`/setting/userManagementDetail${query}`)
     },
 
-    newBannerDetail(pmCode) {
-      this.$router.push(`/setting/bannerDetail`)
+    newUserDetail(pmCode) {
+      this.$router.push(`/setting/userManagementDetail`)
     },
 
     reset() {

@@ -10,6 +10,7 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
+    pmCode: '',
     info: {},
     username: ''
   },
@@ -18,9 +19,11 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, { name, welcome }) => {
+    SET_NAME: (state, name) => {
       state.name = name
-      state.welcome = welcome
+    },
+    SET_PMCODE: (state, pmCode) => {
+      state.pmCode = pmCode
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -45,6 +48,7 @@ const user = {
             const result = response.result
 
             storage.set(ACCESS_TOKEN, result.token)
+            localStorage.setItem('pmCode', result.pmCode)
             commit('SET_TOKEN', result.token)
             resolve(response)
           })
@@ -57,7 +61,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo()
+        getInfo({ pmCode: localStorage.getItem('pmCode') || '' })
           .then(response => {
             const result = response.result
 
@@ -78,6 +82,8 @@ const user = {
               commit('SET_ROLES', result.role)
               commit('SET_INFO', result)
               commit('SET_USERNAME', result.username)
+              commit('SET_NAME', result.name)
+              commit('SET_PMCODE', result.pmCode)
             } else {
               reject(new Error('getInfo: roles must be a non-null array !'))
             }
@@ -102,6 +108,7 @@ const user = {
             commit('SET_TOKEN', '')
             commit('SET_ROLES', [])
             storage.remove(ACCESS_TOKEN)
+            localStorage.removeItem('pmCode')
             resolve()
           })
           .catch(() => {
