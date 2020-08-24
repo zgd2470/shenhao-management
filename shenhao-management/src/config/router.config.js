@@ -55,6 +55,35 @@ export const asyncRouterMap = [
         ]
       },
       {
+        path: '/newsManagement',
+        name: 'newsManagement',
+        component: RouteView,
+        redirect: '/newsManagement/newsList',
+        meta: { title: '新闻管理', icon: 'table', permission: ['form'] },
+        children: [
+          {
+            path: '/newsManagement/newsList',
+            name: 'newsList',
+            component: () => import('@/views/newsManagement/newsList'),
+            meta: { title: '新闻列表', keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/newsManagement/newsDetail',
+            name: 'newsDetail',
+            component: () => import('@/views/newsManagement/newsDetail'),
+            hidden: true,
+            meta: { title: '新闻详情', keepAlive: true, permission: ['form'] }
+          }
+        ]
+      },
+      {
+        path: '/newsManagement/newsDetail',
+        name: 'newsDetail',
+        component: () => import('@/views/newsManagement/newsDetail'),
+        hidden: true,
+        meta: { title: '新闻详情', permission: ['form'] }
+      },
+      {
         path: '/aboutShenHao',
         redirect: '/aboutShenHao/developmentCourse',
         component: RouteView,
@@ -67,6 +96,12 @@ export const asyncRouterMap = [
             meta: { title: '发展历程', keepAlive: true, permission: ['form'] }
           }
         ]
+      },
+      {
+        path: '/dataStatistical',
+        name: 'dataStatistical',
+        component: () => import('@/views/dataStatistical/pageStatistical'),
+        meta: { title: '访问统计', icon: 'table', permission: ['form'] }
       },
       // forms
       // {

@@ -15,7 +15,9 @@ const shenhaoApi = {
   setDevelopmentYear: '/setDevelopmentYear',
   getDevelopmentEvent: '/getDevelopmentEvent',
   deleteDevelopmentYear: '/deleteDevelopmentYear',
-  setDevelopmentEvent: '/setDevelopmentEvent'
+  setDevelopmentEvent: '/setDevelopmentEvent',
+  getStatistical: '/getStatistical',
+  getNewsList: '/getNewsList'
 }
 
 export function deleteDevelopmentYear(parameter) {
@@ -133,6 +135,24 @@ export function getVideoPath(parameter) {
 export function deleteVideo(parameter) {
   return request({
     url: shenhaoApi.deleteVideo,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//获取统计api
+export function getStatistical(parameter) {
+  return request({
+    url: shenhaoApi.getStatistical,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//获取新闻列表api
+export function getNewsList(parameter) {
+  return request({
+    url: shenhaoApi.getNewsList,
     method: 'get',
     params: parameter
   })
