@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { setUser, getBannerDetail, getMenuArray } from '../../api/shenhaoApi'
+import { setUser, getUserDetail, getMenuArray } from '../../api/shenhaoApi'
 export default {
   name: 'BannerDetail',
   data() {
@@ -93,7 +93,7 @@ export default {
       return
     }
 
-    getBannerDetail({ pmCode }).then((res) => {
+    getUserDetail({ pmCode }).then((res) => {
       if (!res.success) {
         this.$message.error(res.message)
         return

@@ -59,7 +59,7 @@ export default {
           //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           // }).catch(() => console.log('Oops errors!'))
           return this.$store.dispatch('Logout').then(() => {
-            window.location.reload()
+            window.location.href = ''
           })
         },
         onCancel() {},
