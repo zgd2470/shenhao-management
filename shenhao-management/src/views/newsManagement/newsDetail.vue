@@ -31,7 +31,7 @@
             ]"
             name="introduction"
           />
-        </a-form-item>
+        </a-form-item>-->
         <a-form-item
           label="文章作者"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"

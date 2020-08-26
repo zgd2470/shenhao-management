@@ -9,6 +9,7 @@
 <script>
 import { domTitle, setDocumentTitle } from '@/utils/domUtil'
 import { i18nRender } from '@/locales'
+import Editor from '@tinymce/tinymce-vue'
 
 // import Editor from '@tinymce/tinymce-vue'
 // import tinymce from 'tinymce'
