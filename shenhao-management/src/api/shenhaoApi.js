@@ -28,7 +28,34 @@ const shenhaoApi = {
   getStatistical: '/getStatistical',
   getNewsList: '/getNewsList',
   getMenuArray: '/getMenuArray',
-  setUser: '/setUser'
+  setUser: '/setUser',
+  getUserList: '/getUserList',
+  getUserDetail: '/getUserDetail',
+  deleteUser: '/deleteUser'
+}
+
+export function deleteUser(parameter) {
+  return request({
+    url: shenhaoApi.deleteUser,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getUserDetail(parameter) {
+  return request({
+    url: shenhaoApi.getUserDetail,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getUserList(parameter) {
+  return request({
+    url: shenhaoApi.getUserList,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function setUser(parameter) {
