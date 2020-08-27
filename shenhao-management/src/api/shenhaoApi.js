@@ -31,7 +31,10 @@ const shenhaoApi = {
   setUser: '/setUser',
   getUserList: '/getUserList',
   getUserDetail: '/getUserDetail',
-  deleteUser: '/deleteUser'
+  deleteUser: '/deleteUser',
+  setNewsDetail: '/setNewsDetail',
+  deleteNews: '/deleteNews',
+  getNewsDetail: '/getNewsDetail',
 }
 
 export function deleteUser(parameter) {
@@ -279,6 +282,35 @@ export function getStatistical(parameter) {
 export function getNewsList(parameter) {
   return request({
     url: shenhaoApi.getNewsList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//删除新闻列表api
+export function deleteNews(parameter) {
+  return request({
+    url: shenhaoApi.deleteNews,
+    method: 'get',
+    params: parameter
+  })
+}
+
+//新闻新增/详情api
+export function setNewsDetail(parameter) {
+  console.log(parameter);
+  return request({
+    url: shenhaoApi.setNewsDetail,
+    method: 'post',
+    data: parameter
+  })
+}
+
+//获取新闻详情api
+export function getNewsDetail(parameter) {
+  console.log(parameter);
+  return request({
+    url: shenhaoApi.getNewsDetail,
     method: 'get',
     params: parameter
   })

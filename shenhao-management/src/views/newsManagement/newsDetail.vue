@@ -26,12 +26,12 @@
             rows="4"
             placeholder="请输入文章简介"
             v-decorator="[
-              'introduction',
+              'introduce',
               {rules: [{ required: true, message: '请输入文章简介' }]}
             ]"
-            name="introduction"
+            name="introduce"
           />
-        </a-form-item>-->
+        </a-form-item>
         <a-form-item
           label="文章作者"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
@@ -83,8 +83,8 @@
           :required="true"
         >
           <a-radio-group
-            v-decorator="['isRecommended' ,{rules: [{ required: true, message: '请选择是否推荐' }]}]"
-            name="isRecommended"
+            v-decorator="['indexRecommended' ,{rules: [{ required: true, message: '请选择是否推荐' }]}]"
+            name="indexRecommended"
           >
             <a-radio :value="1">是</a-radio>
             <a-radio :value="0">否</a-radio>
@@ -98,7 +98,7 @@
           :required="true"
         >
           <a-radio-group
-            v-decorator="['type' ,{rules: [{ required: true, message: '请选择是否推荐' }]}]"
+            v-decorator="['type' ,{rules: [{ required: true, message: '请选择文章类型' }]}]"
             name="type"
           >
             <a-radio :value="0">行业资讯</a-radio>
@@ -110,7 +110,7 @@
           label="标签"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-          :required="true"
+          :required="false"
         >
           <a-tag
             closable
@@ -197,13 +197,13 @@
 <script>
 import { url as baseurl } from '../../utils/config'
 import videoBody from '../../components/videoBody/videoBody'
-import { setVideoDetail, getVideoDetail, getVideoPath } from '../../api/shenhaoApi'
+import { setVideoDetail, getNewsDetail, getVideoPath, setNewsDetail } from '../../api/shenhaoApi'
 import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce'
 import 'tinymce/themes/silver'
 
 export default {
-  name: 'VideoDetail',
+  name: 'NewsDetail',
   components: {
     videoBody,
     Editor,
@@ -224,6 +224,7 @@ export default {
       videoUrl: '',
       videoPmCode: '',
       tags: [],
+      tabsValue: '',
       inputVisible: false,
       myValue: this.value,
       editorConfig: {
@@ -319,21 +320,29 @@ export default {
     if (!pmCode) {
       return
     }
-    getVideoDetail({ pmCode }).then((res) => {
+    getNewsDetail({ pmCode }).then((res) => {
       if (!res.success) {
         this.$message.error(res.message)
         return
       }
       const { data = {} } = res
-      this.form.setFieldsValue({ ...data, isRecommended: Number(data.isRecommended) })
+      this.form.setFieldsValue({ ...data, indexRecommended: Number(data.indexRecommended), type: Number(data.type) })
       this.imageUrl = `/api/file/${data.imgPmCode}`
       this.imgPmCode = data.imgPmCode
       this.videoUrl = data.videoPath
       this.videoPmCode = data.videoPmCode
-      this.pmCode = data.pmCode
+      this.pmCode = pmCode
+      this.tags = data.tags
+      this.myValue = data.text
     })
   },
   methods: {
+    closeTags(name) {
+      this.tags = this.tags.filter((info) => info !== name)
+    },
+    handleInputChange(e) {
+      this.tabsValue = e.target.value
+    },
     handleInputConfirm() {
       this.tags.push(this.tabsValue)
 
@@ -345,23 +354,22 @@ export default {
       console.log('富文本', this.myValue)
       e.preventDefault()
       this.form.validateFields((err, values) => {
+        console.log(values)
         if (!err) {
           if (!this.imgPmCode) {
-            this.$message.error('请上传图片')
+            this.$message.error('请上传封面图片')
+            return
+          } else if (!this.myValue) {
+            this.$message.error('请输入正文内容')
             return
           }
-          if (!this.videoPmCode) {
-            this.$message.error('请上传视频')
-            return
-          }
-
           this.bntLoading = true
-          setVideoDetail({
+          setNewsDetail({
             ...values,
             pmCode: this.pmCode,
             imgPmCode: this.imgPmCode,
-            videoPmCode: this.videoPmCode,
-            videoPath: this.videoUrl,
+            text: this.myValue,
+            tags: this.tags,
           }).then((res) => {
             const { message, success } = res
             this.bntLoading = false
@@ -370,7 +378,7 @@ export default {
               return
             }
             this.$message.success(message)
-            this.$router.push('/knowledgeCenter/videoList')
+            this.$router.push(`/newsManagement/newsList`)
           })
         }
       })

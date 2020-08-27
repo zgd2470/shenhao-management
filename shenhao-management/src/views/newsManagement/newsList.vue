@@ -5,10 +5,10 @@
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="文章分类">
-                <a-select placeholder="请选择" v-decorator="['isRecommended']" :allowClear="true">
-                  <a-select-option value="1">行业资讯</a-select-option>
-                  <a-select-option value="0">案例分享</a-select-option>
+              <a-form-item label="文章类型">
+                <a-select placeholder="请选择" v-decorator="['type']" :allowClear="true">
+                  <a-select-option value="0">行业资讯</a-select-option>
+                  <a-select-option value="1">案例分享</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -19,7 +19,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item label="是否推荐">
-                <a-select placeholder="请选择" v-decorator="['isRecommended']" :allowClear="true">
+                <a-select placeholder="请选择" v-decorator="['indexRecommended']" :allowClear="true">
                   <a-select-option value="1">是</a-select-option>
                   <a-select-option value="0">否</a-select-option>
                 </a-select>
@@ -39,7 +39,7 @@
         <a-button type="primary" @click="newNewsDetail">新建文章</a-button>
       </div>
       <div>
-        <z-table :columns="columns" :data-source="videoList" :scroll="{x:1000}" :loading="loading"></z-table>
+        <z-table :columns="columns" :data-source="newsList" :scroll="{x:1000}" :loading="loading"></z-table>
       </div>
       <max-img :changeImgUrl="changeImgUrl" :imgUrl="imgUrl"></max-img>
       <a-modal
@@ -57,14 +57,14 @@
 </template>
 
 <script>
-import { getVideoList, deleteVideo } from '../../api/shenhaoApi'
+import { getNewsList, deleteNews } from '../../api/shenhaoApi'
 import { isRecommendedEnum } from '../../utils/enum'
 import maxImg from '../../components/maxImg/maxImg'
 import videoBody from '../../components/videoBody/videoBody'
 import ZTable from '../../components/ZTable/ZTable.js'
 
 export default {
-  name: 'VideoList',
+  name: 'NewsList',
   components: {
     maxImg,
     videoBody,
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this),
-      videoList: [],
+      newsList: [],
       imgUrl: '',
       videoUrl: '',
       loading: false,
@@ -106,17 +106,27 @@ export default {
           },
         },
         {
-          title: '是否推荐',
-          dataIndex: 'isRecommended',
-          key: 'isRecommended',
+          title: '文章类型',
+          dataIndex: 'type',
+          key: 'type',
           width: '120px',
           align: 'center',
           customRender: (text) => {
-            return <div>{text}</div>
+            return <div>{text == 1 ? '案例分享' : '行业资讯'}</div>
           },
         },
         {
-          title: '点赞数',
+          title: '是否推荐',
+          dataIndex: 'indexRecommended',
+          key: 'indexRecommended',
+          width: '120px',
+          align: 'center',
+          customRender: (text) => {
+            return <div>{text == 1 ? '是' : '否'}</div>
+          },
+        },
+        {
+          title: '阅读次数',
           dataIndex: 'number',
           key: 'number',
           width: '100px',
@@ -130,15 +140,13 @@ export default {
           customRender: (_, record) => {
             return (
               <div>
-                <a onClick={this.changeVideoUrl.bind(this, `${record.videoPath}`)}>查看视频</a>
-                <a-divider type="vertical" />
-                <a onClick={this.goVideoDetail.bind(this, record.pmCode)}>编辑</a>
+                <a onClick={this.goNewsDetail.bind(this, record.pmCode)}>编辑</a>
                 <a-divider type="vertical" />
                 <a-popconfirm
                   placement="top"
                   ok-text="确定"
                   cancel-text="取消"
-                  onConfirm={this.deleteVideo.bind(this, record.pmCode)}
+                  onConfirm={this.deleteNews.bind(this, record.pmCode)}
                 >
                   <template slot="title">
                     <p>确定删除该视频吗？</p>
@@ -166,12 +174,12 @@ export default {
       this.videoUrl = value
     },
 
-    goVideoDetail(pmCode) {
+    goNewsDetail(pmCode) {
       let query = ''
       if (pmCode) {
         query = `?pmCode=${pmCode}`
       }
-      this.$router.push(`/knowledgeCenter/videoDetail${query}`)
+      this.$router.push(`/newsManagement/newsDetail${query}`)
     },
 
     newNewsDetail(pmCode) {
@@ -184,8 +192,8 @@ export default {
     },
 
     // 删除
-    deleteVideo(pmCode) {
-      deleteVideo({ pmCode }).then((res) => {
+    deleteNews(pmCode) {
+      deleteNews({ pmCode }).then((res) => {
         if (!res.success) {
           this.$message.error(res.message)
           return
@@ -198,17 +206,16 @@ export default {
     handleGetNewsList(curren = 1, pageSize = 200) {
       // 数量不多，先写死数量
       const formValue = this.form.getFieldsValue()
-      const { title = '', isRecommended = '' } = formValue
+      const { title = '', indexRecommended = '', type = '' } = formValue
       this.loading = true
-      getVideoList({ title, isRecommended, curren, pageSize }).then((res) => {
+      getNewsList({ title, indexRecommended, type, curren, pageSize }).then((res) => {
         this.loading = false
         if (res.success) {
           const { data } = res
           // 数据转化
-          this.videoList = data.list.map((info) => {
+          this.newsList = data.list.map((info) => {
             return {
               ...info,
-              isRecommended: isRecommendedEnum[info.isRecommended],
               imgPmCode: `/api/file/${info.imgPmCode}`,
             }
           })
