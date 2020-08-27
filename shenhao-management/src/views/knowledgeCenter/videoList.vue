@@ -4,12 +4,12 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="课程名称">
                 <a-input v-decorator="['title']" placeholder :allowClear="true" />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="是否推荐">
                 <a-select placeholder="请选择" v-decorator="['isRecommended']" :allowClear="true">
                   <a-select-option value="1">是</a-select-option>
@@ -17,8 +17,12 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24"></a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="标签">
+                <a-input v-decorator="['text']" placeholder :allowClear="true" />
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
               <span class="bntBody">
                 <a-button type="primary" @click="handleGetVideoList">查询</a-button>
                 <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -35,9 +39,9 @@
       </div>
       <max-img :changeImgUrl="changeImgUrl" :imgUrl="imgUrl"></max-img>
       <a-modal
-        :visible="Boolean(videoUrl)"
-        @ok="changeVideoUrl('')"
-        @cancel="changeVideoUrl('')"
+        :visible="videoUrl !==null"
+        @ok="changeVideoUrl(null)"
+        @cancel="changeVideoUrl(null)"
         :footer="null"
       >
         <div class="body">
@@ -67,7 +71,7 @@ export default {
       form: this.$form.createForm(this),
       videoList: [],
       imgUrl: '',
-      videoUrl: '',
+      videoUrl: null,
       loading: false,
       columns: [
         {
@@ -122,7 +126,7 @@ export default {
           width: '400px',
         },
         {
-          title: 'tags',
+          title: '标签',
           dataIndex: 'tags',
           key: 'tags',
           width: '200px',
@@ -144,7 +148,7 @@ export default {
           customRender: (_, record) => {
             return (
               <div>
-                <a onClick={this.changeVideoUrl.bind(this, `${record.videoPath}`)}>查看视频</a>
+                <a onClick={this.changeVideoUrl.bind(this, record)}>查看视频</a>
                 <a-divider type="vertical" />
                 <a onClick={this.goVideoDetail.bind(this, record.pmCode)}>编辑</a>
                 <a-divider type="vertical" />
@@ -175,9 +179,8 @@ export default {
       this.imgUrl = value
     },
 
-    changeVideoUrl(value) {
-      console.log(value)
-      this.videoUrl = value
+    changeVideoUrl(info) {
+      this.videoUrl = info
     },
 
     goVideoDetail(pmCode) {
@@ -214,9 +217,9 @@ export default {
       const curren = 1,
         pageSize = 200
       const formValue = this.form.getFieldsValue()
-      const { title = '', isRecommended = '' } = formValue
+      const { title = '', isRecommended = '', text = '' } = formValue
       this.loading = true
-      getVideoList({ title, isRecommended, curren, pageSize }).then((res) => {
+      getVideoList({ title, isRecommended, curren, pageSize, text }).then((res) => {
         this.loading = false
         if (res.success) {
           const { data } = res

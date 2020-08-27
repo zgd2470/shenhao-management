@@ -82,11 +82,12 @@
         >
           <a-input-number
             v-decorator="['sorting' ,{rules: [{ required: true, message: '请输入序号' }]}]"
+            :min="1"
           />
         </a-form-item>
 
         <a-form-item
-          label="tag"
+          label="标签"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
           :required="true"
@@ -135,9 +136,35 @@
           </a-upload>
         </a-form-item>
         <a-form-item
+          label="是否外链视频"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          :required="true"
+        >
+          <a-radio-group v-decorator="['isVideoLink']">
+            <a-radio :value="1">是</a-radio>
+            <a-radio :value="0">否</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          label="视频外链"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          v-show="form.getFieldValue('isVideoLink') === 1"
+        >
+          <a-input
+            v-decorator="[
+              'videoLink',
+            ]"
+            name="title"
+            placeholder="请输入视频外链"
+          />
+        </a-form-item>
+        <a-form-item
           label="上传视频"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          v-show="form.getFieldValue('isVideoLink') === 0"
           :required="true"
         >
           <video-body v-if="videoUrl" :videoUrl="videoUrl" :key="videoUrl"></video-body>
@@ -186,12 +213,15 @@ export default {
       bntLoading: false,
       inputVisible: false,
       tabsValue: '',
-      videoUrl: '',
+      videoUrl: null,
       videoPmCode: '',
     }
   },
-  created() {
+  mounted() {
     const { pmCode } = this.$route.query
+    this.form.setFieldsValue({
+      isVideoLink: 0,
+    })
     // 如果有值说明是编辑
     if (!pmCode) {
       return
@@ -206,10 +236,12 @@ export default {
         ...data,
         isRecommended: Number(data.isRecommended),
         isGuessLike: Number(data.isGuessLike),
+        isVideoLink: Number(data.isVideoLink) ? 1 : 0,
       })
       this.imageUrl = `/api/file/${data.imgPmCode}`
       this.imgPmCode = data.imgPmCode
-      this.videoUrl = data.videoPath
+      this.videoUrl = { videoPath: data.videoPath }
+
       this.videoPmCode = data.videoPmCode
       this.pmCode = data.pmCode
       this.tags = data.tags || []
@@ -237,8 +269,13 @@ export default {
             this.$message.error('请上传图片')
             return
           }
-          if (!this.videoPmCode) {
+          if (this.form.getFieldValue('isVideoLink') === 0 && !this.videoPmCode) {
             this.$message.error('请上传视频')
+            return
+          }
+
+          if (this.form.getFieldValue('isVideoLink') === 1 && !this.form.getFieldValue('videoLink')) {
+            this.$message.error('请输入外链')
             return
           }
 
@@ -249,7 +286,7 @@ export default {
             pmCode: this.pmCode,
             imgPmCode: this.imgPmCode,
             videoPmCode: this.videoPmCode,
-            videoPath: this.videoUrl,
+            videoPath: this.videoUrl.videoPath,
             tags: this.tags,
           }).then((res) => {
             const { message, success } = res
@@ -277,7 +314,8 @@ export default {
           if (!res.success) {
             return
           }
-          this.videoUrl = res.data
+
+          this.videoUrl = { videoPath: res.data }
         })
       }
     },

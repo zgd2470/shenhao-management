@@ -33,17 +33,17 @@
           />
         </a-form-item>
         <a-form-item
-          label="文章作者"
+          label="文章来源"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'auth',
-              {rules: [{ required: false, message: '请输入文章作者' }]}
+              {rules: [{ required: false, message: '请输入文章来源' }]}
             ]"
             name="auth"
-            placeholder="请输入文章作者"
+            placeholder="请输入文章来源"
             style="width:180px"
           />
         </a-form-item>

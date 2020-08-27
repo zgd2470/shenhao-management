@@ -4,12 +4,12 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="规则编号">
                 <a-input v-model="queryParam.id" placeholder />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="使用状态">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
                   <a-select-option value="0">全部</a-select-option>
@@ -19,12 +19,12 @@
               </a-form-item>
             </a-col>
             <template v-if="advanced">
-              <a-col :md="8" :sm="24">
+              <a-col :md="6" :sm="24">
                 <a-form-item label="调用次数">
                   <a-input-number v-model="queryParam.callNo" style="width: 100%" />
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
+              <a-col :md="6" :sm="24">
                 <a-form-item label="更新日期">
                   <a-date-picker
                     v-model="queryParam.date"
@@ -33,7 +33,7 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
+              <a-col :md="6" :sm="24">
                 <a-form-item label="使用状态">
                   <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
                     <a-select-option value="0">全部</a-select-option>
@@ -42,7 +42,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :md="8" :sm="24">
+              <a-col :md="6" :sm="24">
                 <a-form-item label="使用状态">
                   <a-select placeholder="请选择" default-value="0">
                     <a-select-option value="0">全部</a-select-option>

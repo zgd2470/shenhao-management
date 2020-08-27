@@ -4,7 +4,7 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="页面">
                 <a-select placeholder="请选择" v-decorator="['type']" :allowClear="true">
                   <a-select-option value="index">首页</a-select-option>
@@ -17,10 +17,9 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24"></a-col>
-            <a-col :md="8" :sm="24"></a-col>
-            <a-col :md="8" :sm="24"></a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24"></a-col>
+            <a-col :md="6" :sm="24"></a-col>
+            <a-col :md="6" :sm="24">
               <span class="bntBody">
                 <a-button type="primary" @click="handlegetBannerList">查询</a-button>
                 <a-button style="margin-left: 8px" @click="reset">重置</a-button>

@@ -14,10 +14,11 @@ import 'video.js/dist/video-js.css'
 export default {
   props: {
     videoUrl: {
-      type: String,
+      type: Object,
       required: true,
     },
   },
+
   data() {
     return {
       playerOptions: {
@@ -31,7 +32,7 @@ export default {
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [
           {
-            src: `/video/${this.videoUrl}`, // 路径
+            src: Number(this.videoUrl.isVideoLink) ? this.videoUrl.videoLink : `/video/${this.videoUrl.videoPath}`, // 路径
             type: 'video/mp4', // 类型
           },
         ],

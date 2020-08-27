@@ -4,7 +4,7 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="访问类型">
                 <a-radio-group v-model="value" @change="onChange">
                   <a-radio :value="0">页面访问</a-radio>
@@ -12,8 +12,8 @@
                 </a-radio-group>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24"></a-col>
-            <a-col :md="8" :sm="24"></a-col>
+            <a-col :md="6" :sm="24"></a-col>
+            <a-col :md="6" :sm="24"></a-col>
           </a-row>
         </a-form>
       </div>

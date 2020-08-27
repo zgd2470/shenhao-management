@@ -48,6 +48,21 @@
         </a-form-item>
 
         <a-form-item
+          label="部门"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 8}, sm: {span: 17} }"
+        >
+          <a-input
+            placeholder="请输入部门"
+            v-decorator="[
+              'department',
+              {rules: [{ required: true, message: '请输入昵称' }]}
+            ]"
+            :allowClear="true"
+          />
+        </a-form-item>
+
+        <a-form-item
           label="菜单权限"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 8}, sm: {span: 17} }"
