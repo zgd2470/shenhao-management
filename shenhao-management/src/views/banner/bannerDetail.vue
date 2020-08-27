@@ -150,7 +150,7 @@ export default {
               return
             }
             this.$message.success(message)
-            this.$router.push('/banner/bannerList')
+            this.$router.push('/setting/bannerList')
           })
         }
       })
