@@ -4,12 +4,12 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline" :form="form">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="手机号">
                 <a-input v-decorator="['phone']" placeholder :allowClear="true" />
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
               <a-form-item label="是否处理">
                 <a-select placeholder="请选择" v-decorator="['isDeal']" :allowClear="true">
                   <a-select-option :value="0">未处理</a-select-option>
@@ -17,8 +17,18 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24"></a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="处理结果">
+                <a-input v-decorator="['dealResult']" placeholder :allowClear="true" />
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="提交时间">
+                <a-range-picker v-decorator="['releaseTime']" />
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24"></a-col>
+            <a-col :md="8" :sm="24">
               <span class="bntBody">
                 <a-button type="primary" @click="handleCommentsList(1,10)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -34,8 +44,16 @@
           :scroll="{x:1500}"
           :loading="loading"
           :pagination="pagination"
+          :rowKey="rowKey"
+          :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         ></z-table>
       </div>
+      <a-modal title="处理结果" :visible="visible" @ok="handleOk" @cancel="handleCancel">
+        <div style="display:flex">
+          <span style="width:120px;display: flex;justify-content: center;align-items: center;">处理结果：</span>
+          <a-input v-model="dealResult" width="300px" :allowClear="true" />
+        </div>
+      </a-modal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -52,6 +70,11 @@ export default {
   },
   data() {
     return {
+      rowKey: (record) => record.pmCode,
+      visible: false,
+      dealResult: '',
+      selectPmCode: null,
+      selectedRowKeys: [],
       form: this.$form.createForm(this),
       commentsList: [],
       pagination: {
@@ -127,9 +150,13 @@ export default {
           key: 'isDeal',
           width: '90px',
           fixed: 'right',
-          customRender: (text) => {
+          customRender: (text, record) => {
             if (text === '0') {
-              return <div style="color:red">未处理</div>
+              return (
+                <a style="color:red" onClick={this.deal.bind(this, record)}>
+                  未处理
+                </a>
+              )
             }
             if (text === '1') {
               return <div style="color:green">已处理</div>
@@ -137,29 +164,36 @@ export default {
           },
         },
         {
-          title: '操作',
-          key: 'operation',
-          width: '60px',
+          title: '处理结果',
+          dataIndex: 'dealResult',
+          key: 'dealResult',
+          width: '150px',
           fixed: 'right',
-          customRender: (text, record) => {
-            if (record.isDeal === '0') {
-              return (
-                <a-popconfirm
-                  placement="top"
-                  ok-text="确定"
-                  cancel-text="取消"
-                  onConfirm={this.handleDeal.bind(this, record.pmCode)}
-                >
-                  <template slot="title">
-                    <p>确定已处理吗？</p>
-                  </template>
-                  <a>处理</a>
-                </a-popconfirm>
-              )
-            }
-            return null
-          },
         },
+        // {
+        //   title: '操作',
+        //   key: 'operation',
+        //   width: '60px',
+        //   fixed: 'right',
+        //   customRender: (text, record) => {
+        //     if (record.isDeal === '0') {
+        //       return (
+        //         <a-popconfirm
+        //           placement="top"
+        //           ok-text="确定"
+        //           cancel-text="取消"
+        //           onConfirm={this.handleDeal.bind(this, record.pmCode)}
+        //         >
+        //           <template slot="title">
+        //             <p>确定已处理吗？</p>
+        //           </template>
+        //           <a>处理</a>
+        //         </a-popconfirm>
+        //       )
+        //     }
+        //     return null
+        //   },
+        // },
       ],
     }
   },
@@ -167,13 +201,22 @@ export default {
     this.handleCommentsList()
   },
   methods: {
-    reset() {
-      this.form.resetFields()
-      this.handleCommentsList()
+    onSelectChange(selectedRowKeys) {
+      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
     },
-
-    handleDeal(pmCode) {
-      dealDemonstrate({ pmCode }).then((res) => {
+    handleCancel(e) {
+      this.visible = false
+      this.selectPmCode = null
+      this.dealResult = ''
+    },
+    deal(record) {
+      this.visible = true
+      this.selectPmCode = record.pmCode
+    },
+    handleOk(e) {
+      console.log(this.selectPmCode)
+      dealDemonstrate({ pmCode: this.selectPmCode, dealResult: this.dealResult }).then((res) => {
         if (!res.success) {
           this.$message.error(res.message)
           return
@@ -181,12 +224,25 @@ export default {
         const { current, pageSize } = this.pagination
         this.$message.success(res.message)
         this.handleCommentsList(current, pageSize)
+        this.handleCancel()
       })
     },
+    reset() {
+      this.form.resetFields()
+      this.handleCommentsList()
+    },
+
     handleCommentsList(current = 1, pageSize = 10) {
       const formValue = this.form.getFieldsValue()
       this.loading = true
-      getDemonstrateList({ ...formValue, current, pageSize }).then((res) => {
+      let startTime = '',
+        endTime = ''
+      const { phone, isDeal, dealResult, releaseTime } = formValue
+      if (releaseTime && releaseTime.length) {
+        startTime = moment(releaseTime[0]).format('YYYY-MM-DD 00:00:00')
+        endTime = moment(releaseTime[1]).format('YYYY-MM-DD 23:59:59')
+      }
+      getDemonstrateList({ phone, isDeal, dealResult, startTime, endTime, current, pageSize }).then((res) => {
         this.loading = false
         if (res.success) {
           const { data } = res

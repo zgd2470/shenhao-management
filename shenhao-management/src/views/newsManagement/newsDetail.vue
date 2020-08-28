@@ -92,6 +92,17 @@
         </a-form-item>
 
         <a-form-item
+          label="发布时间"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          :required="true"
+        >
+          <a-date-picker
+            v-decorator="['releaseTime' ,{rules: [{ required: true, message: '请选择发布时间' }]}]"
+          />
+        </a-form-item>
+
+        <a-form-item
           label="文章类型"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
@@ -199,6 +210,7 @@ import { url as baseurl } from '../../utils/config'
 import videoBody from '../../components/videoBody/videoBody'
 import { setVideoDetail, getNewsDetail, getVideoPath, setNewsDetail } from '../../api/shenhaoApi'
 import Editor from '@tinymce/tinymce-vue'
+import moment from 'moment'
 import tinymce from 'tinymce'
 import 'tinymce/themes/silver'
 
@@ -314,8 +326,11 @@ export default {
       },
     }
   },
-  created() {
+  mounted() {
     const { pmCode } = this.$route.query
+    this.form.setFieldsValue({
+      releaseTime: moment(),
+    })
     // 如果有值说明是编辑
     if (!pmCode) {
       return
@@ -370,6 +385,9 @@ export default {
             imgPmCode: this.imgPmCode,
             text: this.myValue,
             tags: this.tags,
+            releaseTime: this.form.getFieldValue('releaseTime')
+              ? moment(this.form.getFieldValue('releaseTime')).format('YYYY-MM-DD HH:mm:ss')
+              : '',
           }).then((res) => {
             const { message, success } = res
             this.bntLoading = false
